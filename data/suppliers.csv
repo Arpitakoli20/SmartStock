@@ -1,0 +1,9 @@
+supplier_id,supplier_name,contact_email,lead_time_days,reliability_score,location
+SUP001,Alpha Pharma,alpha@example.com,5,92,Pune
+SUP002,MedCare Distributors,medcare@example.com,7,88,Mumbai
+SUP003,HealthPlus Supplies,healthplus@example.com,10,84,Kolhapur
+SUP004,CityMed Pharma,citymed@example.com,4,95,Pune
+SUP005,LifeCare Distributors,lifecare@example.com,8,86,Sangli
+SUP006,Prime Medicals,prime@example.com,6,90,Satara
+SUP007,HospitalCare Supplies,hospitalcare@example.com,12,80,Mumbai
+SUP008,SafeMed Distributors,safemed@example.com,5,93,Kolhapur

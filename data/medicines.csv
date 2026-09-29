@@ -1,0 +1,41 @@
+medicine_id,medicine_name,category,unit,unit_price,criticality
+MED001,Paracetamol 500mg,Analgesic,Tablet,2.50,Medium
+MED002,Ibuprofen 400mg,Analgesic,Tablet,3.00,Medium
+MED003,Diclofenac 50mg,Analgesic,Tablet,2.80,Medium
+MED004,Tramadol 50mg,Analgesic,Capsule,6.50,High
+MED005,Ketorolac 10mg,Analgesic,Tablet,4.00,Medium
+MED006,Amoxicillin 500mg,Antibiotic,Capsule,8.50,High
+MED007,Azithromycin 500mg,Antibiotic,Tablet,12.00,High
+MED008,Cefixime 200mg,Antibiotic,Tablet,14.00,High
+MED009,Ceftriaxone 1g,Antibiotic,Vial,45.00,High
+MED010,Ciprofloxacin 500mg,Antibiotic,Tablet,7.50,High
+MED011,Metronidazole 400mg,Antibiotic,Tablet,2.20,Medium
+MED012,Doxycycline 100mg,Antibiotic,Capsule,5.00,Medium
+MED013,Metformin 500mg,Antidiabetic,Tablet,1.80,High
+MED014,Glimepiride 2mg,Antidiabetic,Tablet,4.50,High
+MED015,Insulin Regular,Antidiabetic,Vial,150.00,Critical
+MED016,Insulin Glargine,Antidiabetic,Vial,420.00,Critical
+MED017,Amlodipine 5mg,Cardiovascular,Tablet,2.00,High
+MED018,Atenolol 50mg,Cardiovascular,Tablet,2.50,High
+MED019,Losartan 50mg,Cardiovascular,Tablet,3.50,High
+MED020,Atorvastatin 20mg,Cardiovascular,Tablet,6.00,Medium
+MED021,Aspirin 75mg,Cardiovascular,Tablet,1.20,High
+MED022,Clopidogrel 75mg,Cardiovascular,Tablet,7.00,High
+MED023,Salbutamol Inhaler,Respiratory,Inhaler,95.00,Critical
+MED024,Budesonide Inhaler,Respiratory,Inhaler,180.00,High
+MED025,Montelukast 10mg,Respiratory,Tablet,9.00,Medium
+MED026,Theophylline 200mg,Respiratory,Tablet,3.20,Medium
+MED027,Omeprazole 20mg,Gastrointestinal,Capsule,2.50,Medium
+MED028,Pantoprazole 40mg,Gastrointestinal,Tablet,5.50,Medium
+MED029,Ondansetron 4mg,Gastrointestinal,Tablet,4.00,Medium
+MED030,Domperidone 10mg,Gastrointestinal,Tablet,2.80,Low
+MED031,Adrenaline Injection,Emergency,Ampoule,35.00,Critical
+MED032,Atropine Injection,Emergency,Ampoule,25.00,Critical
+MED033,Hydrocortisone Injection,Emergency,Vial,40.00,Critical
+MED034,Furosemide Injection,Emergency,Ampoule,15.00,Critical
+MED035,Diazepam Injection,Emergency,Ampoule,30.00,Critical
+MED036,Normal Saline 500ml,IV Fluid,Bottle,35.00,High
+MED037,Dextrose 5% 500ml,IV Fluid,Bottle,38.00,High
+MED038,Ringers Lactate 500ml,IV Fluid,Bottle,40.00,High
+MED039,Potassium Chloride Injection,IV Fluid,Ampoule,20.00,Critical
+MED040,Sodium Bicarbonate Injection,IV Fluid,Ampoule,22.00,High
