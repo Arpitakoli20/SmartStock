@@ -151,3 +151,31 @@ def get_consumption():
             }
             for record in consumption
         ]
+
+
+
+@app.get("/consumption/{medicine_id}")
+def get_medicine_consumption(medicine_id: str):
+    with engine.connect() as connection:
+        consumption = connection.execute(
+            select(Consumption).where(
+                Consumption.medicine_id == medicine_id
+            )
+        ).fetchall()
+
+        if not consumption:
+            raise HTTPException(
+                status_code=404,
+                detail="Medicine consumption data not found"
+            )
+
+        return [
+            {
+                "id": record.id,
+                "date": record.date,
+                "medicine_id": record.medicine_id,
+                "quantity_consumed": record.quantity_consumed,
+                "demand_type": record.demand_type
+            }
+            for record in consumption
+        ]
