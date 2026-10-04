@@ -2,6 +2,8 @@ from fastapi import FastAPI, HTTPException
 from sqlalchemy import select
 
 from backend.database import engine, Medicine, Inventory, Consumption, Supplier
+
+
 app = FastAPI(
     title="SmartStock API",
     description="Backend API for SmartStock medicine inventory system",
@@ -74,7 +76,38 @@ def get_inventory():
 
 
 # --------------------------------------------------
+# LOW STOCK INVENTORY
+# IMPORTANT: This route must come BEFORE
+# /inventory/{medicine_id}
+# --------------------------------------------------
+
+@app.get("/inventory/low-stock")
+def get_low_stock():
+
+    with engine.connect() as connection:
+
+        inventory = connection.execute(
+            select(Inventory).where(
+                Inventory.current_stock <= Inventory.reorder_level
+            )
+        ).fetchall()
+
+        return [
+            {
+                "medicine_id": item.medicine_id,
+                "current_stock": item.current_stock,
+                "reorder_level": item.reorder_level,
+                "safety_stock": item.safety_stock,
+                "supplier_id": item.supplier_id
+            }
+            for item in inventory
+        ]
+
+
+# --------------------------------------------------
 # SINGLE MEDICINE INVENTORY
+# IMPORTANT: This dynamic route comes AFTER
+# /inventory/low-stock
 # --------------------------------------------------
 
 @app.get("/inventory/{medicine_id}")
@@ -106,36 +139,14 @@ def get_medicine_inventory(medicine_id: str):
 
 
 # --------------------------------------------------
-# LOW STOCK MEDICINES
+# ALL CONSUMPTION
 # --------------------------------------------------
-
-@app.get("/inventory/low-stock")
-def get_low_stock():
-
-    with engine.connect() as connection:
-
-        inventory = connection.execute(
-            select(Inventory).where(
-                Inventory.current_stock <= Inventory.reorder_level
-            )
-        ).fetchall()
-
-        return [
-            {
-                "medicine_id": item.medicine_id,
-                "current_stock": item.current_stock,
-                "reorder_level": item.reorder_level,
-                "safety_stock": item.safety_stock,
-                "supplier_id": item.supplier_id
-            }
-            for item in inventory
-        ]
-
-
 
 @app.get("/consumption")
 def get_consumption():
+
     with engine.connect() as connection:
+
         consumption = connection.execute(
             select(Consumption)
         ).fetchall()
@@ -152,10 +163,15 @@ def get_consumption():
         ]
 
 
+# --------------------------------------------------
+# MEDICINE-WISE CONSUMPTION
+# --------------------------------------------------
 
 @app.get("/consumption/{medicine_id}")
 def get_medicine_consumption(medicine_id: str):
+
     with engine.connect() as connection:
+
         consumption = connection.execute(
             select(Consumption).where(
                 Consumption.medicine_id == medicine_id
@@ -179,9 +195,16 @@ def get_medicine_consumption(medicine_id: str):
             for record in consumption
         ]
 
+
+# --------------------------------------------------
+# ALL SUPPLIERS
+# --------------------------------------------------
+
 @app.get("/suppliers")
 def get_suppliers():
+
     with engine.connect() as connection:
+
         suppliers = connection.execute(
             select(Supplier)
         ).fetchall()
@@ -199,9 +222,15 @@ def get_suppliers():
         ]
 
 
+# --------------------------------------------------
+# SINGLE SUPPLIER
+# --------------------------------------------------
+
 @app.get("/suppliers/{supplier_id}")
 def get_supplier(supplier_id: str):
+
     with engine.connect() as connection:
+
         supplier = connection.execute(
             select(Supplier).where(
                 Supplier.supplier_id == supplier_id
