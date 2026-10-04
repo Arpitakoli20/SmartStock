@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from sqlalchemy import select
 
-from backend.database import engine, Medicine, Inventory
+from backend.database import engine, Medicine, Inventory, Consumption
 
 app = FastAPI(
     title="SmartStock API",
@@ -130,4 +130,24 @@ def get_low_stock():
                 "supplier_id": item.supplier_id
             }
             for item in inventory
+        ]
+
+
+
+@app.get("/consumption")
+def get_consumption():
+    with engine.connect() as connection:
+        consumption = connection.execute(
+            select(Consumption)
+        ).fetchall()
+
+        return [
+            {
+                "id": record.id,
+                "date": record.date,
+                "medicine_id": record.medicine_id,
+                "quantity_consumed": record.quantity_consumed,
+                "demand_type": record.demand_type
+            }
+            for record in consumption
         ]
