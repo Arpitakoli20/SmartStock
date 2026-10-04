@@ -1,6 +1,7 @@
 from pathlib import Path
+
 import pandas as pd
-from sqlalchemy import insert
+from sqlalchemy.dialects.postgresql import insert
 
 from backend.database import engine, Consumption
 
@@ -26,9 +27,12 @@ records = df[
 ].to_dict(orient="records")
 
 
-# Insert into database
+# Insert into PostgreSQL
 with engine.begin() as connection:
-    connection.execute(insert(Consumption), records)
+    connection.execute(
+        insert(Consumption),
+        records
+    )
 
 
 print("Consumption data loaded successfully!")

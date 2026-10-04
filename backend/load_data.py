@@ -2,7 +2,9 @@ import csv
 from datetime import date
 from pathlib import Path
 
-from database import engine, Medicine, Supplier, Inventory
+from sqlalchemy.dialects.postgresql import insert
+
+from backend.database import engine, Medicine, Supplier, Inventory
 
 
 # Project folders
@@ -29,10 +31,19 @@ def load_medicines():
 
     with engine.begin() as connection:
         for row in rows:
-            connection.execute(
-                Medicine.__table__.insert().prefix_with("OR REPLACE"),
-                {
-                    "medicine_id": row["medicine_id"],
+
+            statement = insert(Medicine).values(
+                medicine_id=row["medicine_id"],
+                medicine_name=row["medicine_name"],
+                category=row["category"],
+                unit=row["unit"],
+                unit_price=float(row["unit_price"]),
+                criticality=row["criticality"],
+            )
+
+            statement = statement.on_conflict_do_update(
+                index_elements=[Medicine.medicine_id],
+                set_={
                     "medicine_name": row["medicine_name"],
                     "category": row["category"],
                     "unit": row["unit"],
@@ -40,6 +51,8 @@ def load_medicines():
                     "criticality": row["criticality"],
                 },
             )
+
+            connection.execute(statement)
 
     print(f"Medicines loaded: {len(rows)}")
 
@@ -49,10 +62,19 @@ def load_suppliers():
 
     with engine.begin() as connection:
         for row in rows:
-            connection.execute(
-                Supplier.__table__.insert().prefix_with("OR REPLACE"),
-                {
-                    "supplier_id": row["supplier_id"],
+
+            statement = insert(Supplier).values(
+                supplier_id=row["supplier_id"],
+                supplier_name=row["supplier_name"],
+                contact_email=row["contact_email"],
+                lead_time_days=int(row["lead_time_days"]),
+                reliability_score=float(row["reliability_score"]),
+                location=row["location"],
+            )
+
+            statement = statement.on_conflict_do_update(
+                index_elements=[Supplier.supplier_id],
+                set_={
                     "supplier_name": row["supplier_name"],
                     "contact_email": row["contact_email"],
                     "lead_time_days": int(row["lead_time_days"]),
@@ -60,6 +82,8 @@ def load_suppliers():
                     "location": row["location"],
                 },
             )
+
+            connection.execute(statement)
 
     print(f"Suppliers loaded: {len(rows)}")
 
@@ -69,10 +93,20 @@ def load_inventory():
 
     with engine.begin() as connection:
         for row in rows:
-            connection.execute(
-                Inventory.__table__.insert().prefix_with("OR REPLACE"),
-                {
-                    "medicine_id": row["medicine_id"],
+
+            statement = insert(Inventory).values(
+                medicine_id=row["medicine_id"],
+                current_stock=int(row["current_stock"]),
+                reorder_level=int(row["reorder_level"]),
+                safety_stock=int(row["safety_stock"]),
+                expiry_date=to_date(row["expiry_date"]),
+                supplier_id=row["supplier_id"],
+                last_restock_date=to_date(row["last_restock_date"]),
+            )
+
+            statement = statement.on_conflict_do_update(
+                index_elements=[Inventory.medicine_id],
+                set_={
                     "current_stock": int(row["current_stock"]),
                     "reorder_level": int(row["reorder_level"]),
                     "safety_stock": int(row["safety_stock"]),
@@ -81,6 +115,8 @@ def load_inventory():
                     "last_restock_date": to_date(row["last_restock_date"]),
                 },
             )
+
+            connection.execute(statement)
 
     print(f"Inventory records loaded: {len(rows)}")
 
