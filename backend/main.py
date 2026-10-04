@@ -1,8 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from sqlalchemy import select
 
-from backend.database import engine, Medicine, Inventory, Consumption
-
+from backend.database import engine, Medicine, Inventory, Consumption, Supplier
 app = FastAPI(
     title="SmartStock API",
     description="Backend API for SmartStock medicine inventory system",
@@ -179,3 +178,47 @@ def get_medicine_consumption(medicine_id: str):
             }
             for record in consumption
         ]
+
+@app.get("/suppliers")
+def get_suppliers():
+    with engine.connect() as connection:
+        suppliers = connection.execute(
+            select(Supplier)
+        ).fetchall()
+
+        return [
+            {
+                "supplier_id": record.supplier_id,
+                "supplier_name": record.supplier_name,
+                "contact_email": record.contact_email,
+                "lead_time_days": record.lead_time_days,
+                "reliability_score": record.reliability_score,
+                "location": record.location
+            }
+            for record in suppliers
+        ]
+
+
+@app.get("/suppliers/{supplier_id}")
+def get_supplier(supplier_id: str):
+    with engine.connect() as connection:
+        supplier = connection.execute(
+            select(Supplier).where(
+                Supplier.supplier_id == supplier_id
+            )
+        ).first()
+
+        if supplier is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Supplier not found"
+            )
+
+        return {
+            "supplier_id": supplier.supplier_id,
+            "supplier_name": supplier.supplier_name,
+            "contact_email": supplier.contact_email,
+            "lead_time_days": supplier.lead_time_days,
+            "reliability_score": supplier.reliability_score,
+            "location": supplier.location
+        }
